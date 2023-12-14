@@ -88,7 +88,7 @@ namespace adeliamara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NotaDeVenda notaDeVenda)
+        public async Task<IActionResult> Create(NotaDeVenda notaDeVenda, List<Item> itens)
         {
             if (ModelState.IsValid)
             {
@@ -96,17 +96,25 @@ namespace adeliamara.Controllers
                 _context.Add(notaDeVenda);
 
                 // Itera sobre os itens da nota de venda e os adiciona ao contexto
-                foreach (var item in notaDeVenda.Itens)
+                foreach (var itemViewModel in itens)
                 {
+                    var newItem = new Item
+                    {
+                        ProdutoId = itemViewModel.ProdutoId,
+                        Quantidade = itemViewModel.Quantidade
+                    };
+
+                    // Adiciona o item à nota de venda
+                    notaDeVenda.Itens.Add(newItem);
+
                     // Certifique-se de associar o item à nota de venda
-                    item.NotaDeVendaId = notaDeVenda.Id;
-                    _context.Item.Add(item);
+                    newItem.NotaDeVendaId = notaDeVenda.Id;
 
                     // Atualiza a quantidade do produto (ou qualquer outra lógica que você precisar)
-                    var produto = _context.Produto.Find(item.ProdutoId);
+                    var produto = _context.Produto.Find(itemViewModel.ProdutoId);
                     if (produto != null)
                     {
-                        produto.Quantidade -= item.Quantidade;
+                        produto.Quantidade -= itemViewModel.Quantidade;
                     }
                 }
 
@@ -117,7 +125,7 @@ namespace adeliamara.Controllers
             }
 
             // Se houver algum erro de validação, preencha novamente as ViewBag e retorne a view
-            ViewData["Itens"] = new SelectList(_context.Item, "Id", "Nome");
+            ViewData["Produtos"] = new SelectList(_context.Produto, "Id", "Nome");
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaDeVenda.ClienteId);
             ViewData["TipoDePagamentoId"] = new SelectList(_context.TiposDePagamento, "Id", "Discriminator", notaDeVenda.TipoDePagamentoId);
             ViewData["TransportadoraId"] = new SelectList(_context.Transportadora, "Id", "Id", notaDeVenda.TransportadoraId);
@@ -139,7 +147,9 @@ namespace adeliamara.Controllers
             {
                 return NotFound();
             }
+
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaDeVenda.ClienteId);
+            ViewData["Itens"] = new SelectList(_context.Item, "Id", "Nome");
             ViewData["TipoDePagamentoId"] = new SelectList(_context.TiposDePagamento, "Id", "Discriminator", notaDeVenda.TipoDePagamentoId);
             ViewData["TransportadoraId"] = new SelectList(_context.Transportadora, "Id", "Id", notaDeVenda.TransportadoraId);
             ViewData["VendedorId"] = new SelectList(_context.Vendedor, "Id", "Id", notaDeVenda.VendedorId);
@@ -162,6 +172,7 @@ namespace adeliamara.Controllers
             {
                 try
                 {
+
                     _context.Update(notaDeVenda);
                     await _context.SaveChangesAsync();
                 }
@@ -179,7 +190,7 @@ namespace adeliamara.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-
+            ViewData["Produtos"] = new SelectList(_context.Produto, "Id", "Nome");
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaDeVenda.ClienteId);
             ViewData["TipoDePagamentoId"] = new SelectList(_context.TiposDePagamento, "Id", "Discriminator", notaDeVenda.TipoDePagamentoId);
             ViewData["TransportadoraId"] = new SelectList(_context.Transportadora, "Id", "Id", notaDeVenda.TransportadoraId);

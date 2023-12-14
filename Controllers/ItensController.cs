@@ -54,6 +54,30 @@ namespace adeliamara.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Route("Itens/create/{notaId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int notaId, [Bind("Id,Preco,Percentual,Quantidade,NotaDeVendaId,ProdutoId")] Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                // Certifique-se de que a NotaDeVenda com o ID fornecido existe
+              
+
+                // Configurar o ID da nota antes de adicionar o item
+                item.NotaDeVendaId = notaId;
+                _context.Add(item);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["ExibirNotaDeVendaId"] = false;
+            ViewData["NotaDeVendaId"] = new SelectList(_context.NotaDeVenda, "Id", "Id", item.NotaDeVendaId);
+            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", item.ProdutoId);
+            return View(item);
+        }
+
         // POST: Itens/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -67,10 +91,13 @@ namespace adeliamara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ExibirNotaDeVendaId"] = true;
             ViewData["NotaDeVendaId"] = new SelectList(_context.NotaDeVenda, "Id", "Id", item.NotaDeVendaId);
             ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", item.ProdutoId);
             return View(item);
         }
+
+
 
         // GET: Itens/Edit/5
         public async Task<IActionResult> Edit(int? id)

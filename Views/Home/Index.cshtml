@@ -1,14 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Site de vendas</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿<div class="text-center">
+    <h1 class="display-4">Site de Vendas</h1>
+    <p>Aprenda sobre <a href="https://docs.microsoft.com/aspnet/core">construir aplicativos Web com ASP.NET Core</a>.</p>
     
     <a class="btn btn-primary" href="/Produtos/Index">Ver Produtos</a>
+    <p>Clique em "Ver Produtos" para visualizar a lista de produtos disponíveis.</p>
+
     <a class="btn btn-primary" href="/NotasDeVenda/Index">Ver Notas</a>
-    <a class="btn btn-primary" href="/NotasCanceladas/Index">Ver Notas Canceladas</a>
-    <a class="btn btn-primary" href="/NotasDevolvidas/Index">Ver Notas Devolvidas</a>
+    <p>Clique em "Ver Notas" para visualizar suas notas de venda. Para ver os itens de uma nota, clique em "Detalhes" na nota desejada.</p>
+
     <a class="btn btn-primary" href="/Clientes/Index">Ver Clientes</a>
+    <p>Clique em "Ver Clientes" para visualizar a lista de clientes.</p>
+
+    <p>Para adicionar um novo item a uma nota:</p>
+    <ol>
+        <li>Clique em "Ver Notas".</li>
+        <li>Escolha a nota desejada e clique em "Detalhes".</li>
+        <li>Na página de detalhes da nota, clique em "Adicionar Item".</li>
+        <li>Preencha as informações do item e clique em "Criar".</li>
+    </ol>
 </div>
