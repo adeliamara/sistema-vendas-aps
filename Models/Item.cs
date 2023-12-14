@@ -16,7 +16,7 @@ namespace adeliamara.Models
         public double Preco {get; set;}
 
         public double Percentual {get; set;}
-        
+
         public int Quantidade {get; set;}
 
         [Display(Name = "Nota de Venda")]
@@ -24,8 +24,12 @@ namespace adeliamara.Models
         public int NotaDeVendaId {get; set;}
         public NotaDeVenda? NotaDeVenda {get; set;}
 
+        [Display(Name = "Produto")]
+
         [ForeignKey("Produto")]
         public int ProdutoId {get; set;}
         public Produto? Produto {get; set;}
+
+        
     }
 }

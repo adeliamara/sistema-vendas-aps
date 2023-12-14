@@ -1,0 +1,39 @@
+@model IEnumerable<adeliamara.Models.Produto>
+
+@{
+    ViewData["Title"] = "Lista de Produtos";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="display-4">Lista de Produtos</h1>
+        </div>
+        <div class="card-body">
+            <p>
+                <a class="btn btn-primary" asp-action="Create">Adicionar Novo Produto</a>
+            </p>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Nome</h5>
+                                <p class="card-text">@item.Descricao</p>
+                                <p class="card-text">Preço: @item.Preco.ToString("C")</p>
+                                <p class="card-text">Quantidade: @item.Quantidade</p>
+                                <p class="card-text">Marca: @item.Marca.Nome</p>
+                                <div class="btn-group">
+                                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
